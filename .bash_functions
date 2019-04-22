@@ -40,7 +40,7 @@ function vimext() {
 }
 
 function mergenvs() {
-	echo "$@" | xargs -n 1 conda list -e -n | sed "/^#.*$/d" | sort | uniq
+  echo "$@" | xargs -n 1 conda list -e -n | sed "/^#.*$/d" | sort | uniq
 }
 
 # Open configuration files
