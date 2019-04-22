@@ -39,6 +39,10 @@ function vimext() {
   done
 }
 
+function mergenvs() {
+	echo "$@" | xargs -n 1 conda list -e -n | sed "/^#.*$/d" | sort | uniq
+}
+
 # Open configuration files
 function edc() {
   vim -p ~/.bashrc ~/.bash_aliases ~/.bash_functions ~/.bash_misc ~/.inputrc ~/.bash_noport ~/.vimrc ~/.vim/after/* ~/.vim_noport.vim ~/.vim_vundle_noport.vim ~/.tmux.conf ~/.config/i3/config ~/.config/zathura/zathurarc
