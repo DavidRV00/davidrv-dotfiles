@@ -5,7 +5,6 @@ set nocompatible
 " Basic options "
 "==============="
 
-syntax on
 colorscheme delek
 set tabpagemax=300
 set splitbelow
@@ -19,6 +18,9 @@ set shiftwidth=2
 
 " Automatically change the working path to the path of the current file.
 autocmd BufNewFile,BufEnter * silent! lcd %:p:h
+
+" Remove trailing whitespace on save
+autocmd BufWritePre * %s/\s\+$//e
 
 " Make it so that autoread triggers when the cursor is still and when changing
 " buffers (autoread is added by vim-sensible).
@@ -147,6 +149,7 @@ endf
 
 " Maps
 let mapleader = "-"
+let maplocalleader = "\\"
 inoremap kj <Esc>
 inoremap <leader>w <Esc>:<C-u>w<CR>
 nnoremap <leader>w :<C-u>w<CR>
@@ -232,6 +235,9 @@ if isdirectory(expand('$HOME/.vim/bundle/Vundle.vim'))
   "\ 'spinner': ['fg', 'Label'],
   "\ 'header':  ['fg', 'Comment'] }
 
+  " LaTeX editing
+  Plugin 'lervag/vimtex'
+
   " Load non-portable plugins and settings
   source $HOME/.vim_vundle_noport.vim
 
@@ -246,3 +252,10 @@ source $HOME/.vim_noport.vim
 " Enable file type based indentation
 " This must be done AFTER loading plugins and sourcing configuration.
 filetype plugin indent on
+syntax on
+
+" Auto-write latex files if cursor is held still (then vimtex compiles on save)
+autocmd BufNewFile,BufRead *.tex :VimtexCompile
+autocmd BufNewFile,BufRead *.tex :set updatetime=500
+autocmd CursorHold *.tex :update
+autocmd CursorHoldI *.tex :update
