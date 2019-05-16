@@ -159,6 +159,7 @@ nnoremap <PageDown> gT
 nnoremap <Tab> gt
 nnoremap <S-Tab> gT
 nnoremap <leader>lc :set cursorline!<CR>
+nnoremap <leader>z vi{zf
 
 "========================================="
 " Vundle configuration / External plugins "
