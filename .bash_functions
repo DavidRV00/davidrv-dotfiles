@@ -43,6 +43,14 @@ function mergenvs() {
   echo "$@" | xargs -n 1 conda list -e -n | sed "/^#.*$/d" | sort | uniq
 }
 
+function bqf() {
+  cat $1 | bq query
+}
+
+function mdpdf() {
+  pandoc -t latex -o $1.pdf $1.md && xdg-open $1.pdf & disown
+}
+
 # Open configuration files
 function edc() {
   vim -p ~/.bashrc ~/.bash_aliases ~/.bash_functions ~/.bash_misc ~/.inputrc ~/.bash_noport ~/.vimrc ~/.vim/after/* ~/.vim_noport.vim ~/.vim_vundle_noport.vim ~/.tmux.conf ~/.config/i3/config ~/.config/zathura/zathurarc
