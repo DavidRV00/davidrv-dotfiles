@@ -239,6 +239,9 @@ if isdirectory(expand('$HOME/.vim/bundle/Vundle.vim'))
   " LaTeX editing
   Plugin 'lervag/vimtex'
 
+  " Surround selection with things
+  Plugin 'tpope/vim-surround'
+
   " Load non-portable plugins and settings
   source $HOME/.vim_vundle_noport.vim
 

@@ -51,6 +51,47 @@ function mdpdf() {
   pandoc -t latex -o $1.pdf $1.md && xdg-open $1.pdf & disown
 }
 
+# Does not allow for passing scripts in via process-substitution
+# because proc-sub uses pipes, not tmp-file.
+#
+# To do this, you'll have to create tmp-file yourself and echo the name.
+function edcat() {
+  filename="$1"
+
+  mutex=/tmp/edcatmutex
+  while test -f $mutex; do
+    :
+  done
+
+  touch $mutex
+  $EDITOR "$filename" </dev/tty >/dev/tty;
+  rm $mutex
+
+  if test -f "$filename"; then
+    if [ "$2" == "-n" ]; then
+      echo "$filename"
+    else
+      cat "$filename"
+
+      if [ "$2" == "-c" ]; then
+        rm "$filename"
+      fi;
+    fi;
+  else
+    echo ""
+  fi;
+}
+
+function edcatt() {
+  edcat "$(mktemp -u /tmp/edcat.XXXXXXX.$1)" $2
+}
+
+function edcats() {
+  filename=$(edcat "$(mktemp -u /tmp/edcat.XXXXXXX.$1)" -n)
+  chmod a+x $filename
+  echo $filename
+}
+
 # Open configuration files
 function edc() {
   vim -p ~/.bashrc ~/.bash_aliases ~/.bash_functions ~/.bash_misc ~/.inputrc ~/.bash_noport ~/.vimrc ~/.vim/after/* ~/.vim_noport.vim ~/.vim_vundle_noport.vim ~/.tmux.conf ~/.config/i3/config ~/.config/zathura/zathurarc
