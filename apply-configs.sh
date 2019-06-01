@@ -2,6 +2,11 @@
 
 REPO=$HOME/davidrv-dotfiles
 
+mkdir -p $HOME/.bash_completion.d/
+mkdir -p $HOME/.config/i3/
+mkdir -p $HOME/.config/zathura/
+mkdir -p $HOME/.vim/after/
+
 cp $REPO/.bash_aliases $REPO/.bash_functions $REPO/.bash_misc $REPO/.inputrc $REPO/.tmux.conf $REPO/.vimrc $HOME
 cp -r $REPO/.bash_completion.d/* $HOME/.bash_completion.d/
 cp $REPO/.config/i3/config.base $HOME/.config/i3/config.base
