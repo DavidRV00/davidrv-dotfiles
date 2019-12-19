@@ -179,10 +179,10 @@ bar {
 bindsym $mod+i exec google-chrome
 
 # Hide mouse curser when idle
-exec --no-startup-id "unclutter -idle 2 -noevents"
+exec_always --no-startup-id "unclutter -idle 2 -noevents"
 
 # Restore wallpapers
-exec --no-startup-id nitrogen --restore
+exec_always --no-startup-id nitrogen --restore
 
 # Compton
-exec --no-startup-id /usr/bin/compton
+exec_always --no-startup-id /usr/bin/compton
