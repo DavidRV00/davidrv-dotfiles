@@ -175,3 +175,12 @@ bar {
         status_command i3status
 }
 
+# Open internet browser
+bindsym $mod+i exec google-chrome
+
+# Hide mouse curser when idle
+exec --no-startup-id "unclutter -idle 2 -noevents"
+
+# Restore wallpapers
+exec --no-startup-id nitrogen --restore
+
