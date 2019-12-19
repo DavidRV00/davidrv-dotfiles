@@ -1,9 +1,11 @@
 #!/bin/bash
 
-REPO=$HOME/davidrv-dotfiles
+REPO_DOTFILES_DIR="$HOME/davidrv-dotfiles/dotfiles"
 
-cp $HOME/.bash_aliases $HOME/.bash_functions $HOME/.bash_misc $HOME/.inputrc $HOME/.tmux.conf $HOME/.vimrc $REPO
-cp -r $HOME/.bash_completion.d/* $REPO/.bash_completion.d/
-cp $HOME/.config/i3/config.base $REPO/.config/i3/config.base
-cp $HOME/.config/zathura/zathurarc $REPO/.config/zathura/zathurarc
-cp -r $HOME/.vim/after/* $REPO/.vim/after/
+rm -rfv $REPO_DOTFILES_DIR
+mkdir -pv $REPO_DOTFILES_DIR
+
+for f in $(cat $HOME/.dotfiles); do
+    mkdir -pv $REPO_DOTFILES_DIR/$(dirname "$f") &&
+    cp -rv $HOME/$f $REPO_DOTFILES_DIR/$f;
+done

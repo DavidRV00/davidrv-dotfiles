@@ -1,0 +1,12 @@
+set editing-mode vi
+
+# vi settings
+$if mode=vi
+  set keymap vi-insert
+  "kj": vi-movement-mode # remap escape
+$endif
+
+# Change cursor shape for terminal insert vs vi-mode
+set show-mode-in-prompt on
+set vi-cmd-mode-string "\1\e[2 q\2"
+set vi-ins-mode-string "\1\e[6 q\2"

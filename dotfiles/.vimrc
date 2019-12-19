@@ -18,6 +18,7 @@ set shiftwidth=2
 
 " Automatically change the working path to the path of the current file.
 autocmd BufNewFile,BufEnter * silent! lcd %:p:h
+let g:netrw_keepdir=0
 
 " Remove trailing whitespace on save
 autocmd BufWritePre * %s/\s\+$//e
@@ -28,16 +29,29 @@ au CursorHold,CursorHoldI * checktime
 au FocusGained,BufEnter * checktime
 
 " Automatically toggle 'set paste' when pasting.
-let &t_SI .= "\<Esc>[?2004h"
-let &t_EI .= "\<Esc>[?2004l"
-inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+function! WrapForTmux(s)
+  if !exists('$TMUX')
+    return a:s
+  endif
+
+  let tmux_start = "\<Esc>Ptmux;"
+  let tmux_end = "\<Esc>\\"
+
+  return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
+endfunction
+
+let &t_SI .= WrapForTmux("\<Esc>[?2004h")
+let &t_EI .= WrapForTmux("\<Esc>[?2004l")
+
 function! XTermPasteBegin()
   set pastetoggle=<Esc>[201~
   set paste
   return ""
 endfunction
 
-" Relative line numbers in current tab, absolute in other tabs set number
+inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
+
+" Relative line numbers in current tab, absolute in other tabs
 if has('autocmd')
 augroup vimrc_linenumbering
   autocmd!
@@ -55,6 +69,12 @@ augroup vimrc_linenumbering
   \ endif
 augroup END
 endif
+
+" Don't let netrw screw up line numbering
+let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
+
+" Tree view in netrw
+let g:netrw_liststyle=3
 
 " Rename tabs to show tab number.
 " (Based on http://stackoverflow.com/questions/5927952
@@ -147,6 +167,14 @@ function QuoteDelim(char)
   endif
 endf
 
+" Change cursor depending on mode
+let &t_SI = "\e[6 q"
+let &t_EI = "\e[2 q"
+augroup myCmds
+au!
+autocmd VimEnter * silent !echo -ne "\e[2 q"
+augroup END
+
 " Maps
 let mapleader = "-"
 let maplocalleader = "\\"
@@ -160,6 +188,25 @@ nnoremap <Tab> gt
 nnoremap <S-Tab> gT
 nnoremap <leader>lc :set cursorline!<CR>
 nnoremap <leader>z vi{zf
+" Are the p ones really necessary? They might just paste FROM reg 0, meanwhile
+" the d one already has deleting TO reg 0 (incl in p and c) covered.
+vnoremap p "0p
+vnoremap P "0P
+nnoremap d "0d
+nnoremap <leader>] :cn<CR>
+nnoremap <leader>[ :cp<CR>
+
+" Netrw-specific maps
+nmap <Leader>- <Plug>VinegarUp
+nnoremap - -
+"augroup netrw_mapping
+"    autocmd!
+"    autocmd filetype netrw call NetrwMapping()
+"augroup END
+"
+"function! NetrwMapping()
+"    "noremap <buffer> a
+"endfunction
 
 "========================================="
 " Vundle configuration / External plugins "

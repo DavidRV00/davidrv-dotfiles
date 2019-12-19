@@ -1,0 +1,11 @@
+.dotfiles
+.bash_aliases
+.bash_functions
+.bash_misc
+.inputrc
+.tmux.conf
+.vimrc
+.bash_completion.d
+.config/i3/config.base
+.config/zathura/zathurarc
+.vim/after
