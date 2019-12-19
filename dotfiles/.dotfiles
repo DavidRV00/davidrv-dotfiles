@@ -7,5 +7,6 @@
 .vimrc
 .bash_completion.d
 .config/i3/config.base
+.config/i3/build.sh
 .config/zathura/zathurarc
 .vim/after
