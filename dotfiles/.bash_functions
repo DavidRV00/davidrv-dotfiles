@@ -94,7 +94,7 @@ function edcats() {
 
 # Open configuration files
 function edc() {
-  vim -p ~/.bashrc ~/.bash_aliases ~/.bash_functions ~/.bash_misc ~/.inputrc ~/.bash_noport ~/.vimrc ~/.vim/after/* ~/.vim_noport.vim ~/.vim_vundle_noport.vim ~/.tmux.conf ~/.config/i3/config ~/.config/zathura/zathurarc
+  vim -p $(for f in $(cat ~/.dotfiles); do echo ~/$f; done) ~/.bashrc ~/.bash_noport ~/.vim_noport.vim ~/.vim_vundle_noport.vim
 }
 
 # Todo:
