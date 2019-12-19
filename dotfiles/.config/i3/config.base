@@ -184,3 +184,5 @@ exec --no-startup-id "unclutter -idle 2 -noevents"
 # Restore wallpapers
 exec --no-startup-id nitrogen --restore
 
+# Compton
+exec --no-startup-id /usr/bin/compton

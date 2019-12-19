@@ -6,7 +6,8 @@
 .tmux.conf
 .vimrc
 .bash_completion.d
-.config/i3/config.base
 .config/i3/build.sh
+.config/i3/config.base
+.config/compton.conf
 .config/zathura/zathurarc
 .vim/after
