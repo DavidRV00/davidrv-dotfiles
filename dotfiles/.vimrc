@@ -5,11 +5,14 @@ set nocompatible
 " Basic options "
 "==============="
 
+set background=dark
+"set t_Co=256
 colorscheme delek
 set tabpagemax=300
 set splitbelow
 set splitright
 set number
+set cursorline
 
 " For some reason, for Go formatting I need to copy these lines into
 " ~/.vim/after/ftplugin/go.vim
