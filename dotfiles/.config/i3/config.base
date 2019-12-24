@@ -32,7 +32,10 @@ font pango:monospace 8
 floating_modifier $mod
 
 # hide borders adjacent to screen edges
-hide_edge_borders both
+hide_edge_borders none
+
+# border style
+default_border pixel 3
 
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
