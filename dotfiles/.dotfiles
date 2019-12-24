@@ -10,4 +10,5 @@
 .config/i3/config.base
 .config/compton.conf
 .config/zathura/zathurarc
+.config/newsboat/config
 .vim/after
