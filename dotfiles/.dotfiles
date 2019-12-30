@@ -12,5 +12,5 @@
 .config/zathura/zathurarc
 .config/newsboat/config
 .vim/after
-.vim/.jupyterrun.vim
+.vim/jupyterrun.vim
 bin
