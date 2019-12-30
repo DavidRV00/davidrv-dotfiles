@@ -20,16 +20,27 @@ set tabstop=2
 set shiftwidth=2
 
 " Automatically change the working path to the path of the current file.
-autocmd BufNewFile,BufEnter * silent! lcd %:p:h
+augroup setpath
+  autocmd BufNewFile,BufEnter * silent! lcd %:p:h
+augroup END
 let g:netrw_keepdir=0
 
 " Remove trailing whitespace on save
-autocmd BufWritePre * %s/\s\+$//e
+function! RemoveWhitespace()
+  let save_pos = getpos(".")
+  execute "normal! :%s/\\s\\+$//e\<cr>"
+  call setpos('.', save_pos)
+endfunction
+augroup whitespace
+  autocmd BufWritePre * call RemoveWhitespace()
+augroup END
 
 " Make it so that autoread triggers when the cursor is still and when changing
 " buffers (autoread is added by vim-sensible).
-au CursorHold,CursorHoldI * checktime
-au FocusGained,BufEnter * checktime
+augroup autoread
+  au CursorHold,CursorHoldI * checktime
+  au FocusGained,BufEnter * checktime
+augroup END
 
 " Automatically toggle 'set paste' when pasting.
 function! WrapForTmux(s)
@@ -131,15 +142,17 @@ inoremap ( ()<Esc>i
 inoremap [ []<Esc>i
 inoremap { {}<Esc>i
 inoremap {<CR> {<CR>}<Esc>O
-autocmd Syntax html,vim inoremap < <lt>><Esc>i| inoremap > <c-r>=ClosePair('>')<CR>
 inoremap ) <c-r>=ClosePair(')')<CR>
 inoremap ] <c-r>=ClosePair(']')<CR>
 "inoremap } <c-r>=CloseBracket()<CR>
 inoremap } <c-r>=ClosePair('}')<CR>
 inoremap " <c-r>=QuoteDelim('"')<CR>
 inoremap ' <c-r>=QuoteDelim("'")<CR>
+augroup htmlcarrots
+  autocmd Syntax html,vim inoremap < <lt>><Esc>i| inoremap > <c-r>=ClosePair('>')<CR>
+augroup END
 
-function ClosePair(char)
+function! ClosePair(char)
   if getline('.')[col('.') - 1] == a:char
   return "\<Right>"
   else
@@ -155,7 +168,7 @@ endf
 " endif
 "endf
 
-function QuoteDelim(char)
+function! QuoteDelim(char)
   let line = getline('.')
   let col = col('.')
   if line[col - 2] == "\\"
@@ -173,14 +186,15 @@ endf
 " Change cursor depending on mode
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
-augroup myCmds
-au!
-autocmd VimEnter * silent !echo -ne "\e[2 q"
-augroup END
+"augroup myCmds
+"au!
+"autocmd VimEnter * silent !echo -ne "\e[2 q"
+"augroup END
+
 
 " Maps
 let mapleader = "-"
-let maplocalleader = "\\"
+let maplocalleader = ";"
 inoremap kj <Esc>
 inoremap <leader>w <Esc>:<C-u>w<CR>
 nnoremap <leader>w :<C-u>w<CR>
@@ -198,6 +212,9 @@ vnoremap P "0P
 nnoremap d "0d
 nnoremap <leader>] :cn<CR>
 nnoremap <leader>[ :cp<CR>
+
+" Edit and run jupyter-notebook-style scripts from Vim
+source $HOME/.vim/jupyterrun.vim
 
 " Netrw-specific maps
 nmap <Leader>- <Plug>VinegarUp
@@ -292,6 +309,15 @@ if isdirectory(expand('$HOME/.vim/bundle/Vundle.vim'))
   " Surround selection with things
   Plugin 'tpope/vim-surround'
 
+  " Send text to tmux panes
+  "Plugin 'esamattis/slimux' " Has bugs with unmerged pull-requests
+  Plugin 'lotabout/slimux'
+  let g:slimux_python_use_ipython=1
+  let g:slimux_python_press_enter=1
+
+  " Asynchronous external commands
+  Plugin 'tpope/vim-dispatch'
+
   " Load non-portable plugins and settings
   source $HOME/.vim_vundle_noport.vim
 
@@ -309,7 +335,14 @@ filetype plugin indent on
 syntax on
 
 " Auto-write latex files if cursor is held still (then vimtex compiles on save)
-autocmd BufNewFile,BufRead *.tex :VimtexCompile
-autocmd BufNewFile,BufRead *.tex :set updatetime=500
-autocmd CursorHold *.tex :update
-autocmd CursorHoldI *.tex :update
+augroup tex
+  autocmd BufNewFile,BufRead *.tex :VimtexCompile
+  autocmd BufNewFile,BufRead *.tex :set updatetime=500
+  autocmd CursorHold *.tex :update
+  autocmd CursorHoldI *.tex :update
+augroup END
+
+hi! link QuickFixLine PmenuSel
+hi! LineNr ctermbg=darkblue ctermfg=white
+hi! CursorLineNr ctermbg=blue ctermfg=black
+hi! CursorLine cterm=NONE ctermbg=0x010101 guibg=darkred

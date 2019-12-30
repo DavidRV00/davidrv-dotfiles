@@ -1,0 +1,11 @@
+#!/bin/bash
+
+group="$1"
+
+if [ "$group" != "" ]; then
+  tmux new -d -s "$group" -t "$group"
+  tmux new -d -s "$group"-0 -t "$group"
+  tmux new -d -s "$group"-1 -t "$group"
+else
+  echo "Give a group name."
+fi;

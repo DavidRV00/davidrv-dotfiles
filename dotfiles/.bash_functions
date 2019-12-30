@@ -96,6 +96,9 @@ function edcats() {
 function edc() {
   vim -p $(for f in $(cat ~/.dotfiles); do echo ~/$f; done) ~/.bashrc ~/.bash_noport ~/.vim_noport.vim ~/.vim_vundle_noport.vim
 }
+function sec() {
+  cat $HOME/.dotfiles | dmenu -l $(wc -l $HOME/.dotfiles | cut -f1 -d ' ')
+}
 
 # Todo:
 # Script to find all matching files/dirs, create symlinks to all of them and
