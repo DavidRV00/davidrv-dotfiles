@@ -35,7 +35,7 @@ floating_modifier $mod
 hide_edge_borders none
 
 # border style
-default_border pixel 3
+for_window [class=".*"] border pixel 3
 
 # start a terminal
 bindsym $mod+Return exec i3-sensible-terminal
