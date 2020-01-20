@@ -12,5 +12,4 @@
 .config/zathura/zathurarc
 .config/newsboat/config
 .vim/after
-.vim/jupyterrun.vim
-bin
+bin/tnewpair
