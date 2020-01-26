@@ -13,6 +13,7 @@ set splitbelow
 set splitright
 set number
 set cursorline
+set clipboard=unnamedplus
 
 " For some reason, for Go formatting I need to copy these lines into
 " ~/.vim/after/ftplugin/go.vim
