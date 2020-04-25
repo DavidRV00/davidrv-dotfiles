@@ -390,7 +390,7 @@ set cursorline
 """hi! LineNr ctermbg=black ctermfg=white
 hi! LineNr ctermbg=233 "ctermfg=white
 """hi! CursorLineNr ctermbg=blue ctermfg=black
-hi! CursorLineNr ctermbg=16 ctermfg=139
+hi! CursorLineNr cterm=NONE ctermbg=16 ctermfg=139
 """hi! CursorLine cterm=NONE ctermbg=black guibg=darkred
 hi! CursorLine cterm=NONE ctermbg=233 guibg=darkred
 """hi! Conceal ctermbg=233 ctermfg=black
