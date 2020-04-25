@@ -20,6 +20,9 @@ set clipboard=unnamedplus
 set tabstop=2
 set shiftwidth=2
 
+" Allow saving of files as sudo when I forgot to start vim using sudo.
+cmap w!! w !sudo tee > /dev/null %
+
 " Automatically change the working path to the path of the current file.
 augroup setpath
   autocmd BufNewFile,BufEnter * silent! lcd %:p:h
@@ -208,9 +211,9 @@ nnoremap <leader>lc :set cursorline!<CR>
 nnoremap <leader>z vi{zf
 " Are the p ones really necessary? They might just paste FROM reg 0, meanwhile
 " the d one already has deleting TO reg 0 (incl in p and c) covered.
-vnoremap p "0p
-vnoremap P "0P
-nnoremap d "0d
+"vnoremap p "0p
+"vnoremap P "0P
+"nnoremap d "0d
 nnoremap <leader>] :cn<CR>
 nnoremap <leader>[ :cp<CR>
 
@@ -318,6 +321,9 @@ if isdirectory(expand('$HOME/.vim/bundle/Vundle.vim'))
 
   " Asynchronous external commands
   Plugin 'tpope/vim-dispatch'
+
+  " Highlight instances of current word
+  "Plugin 'dominikduda/vim_current_word'
 
   " Load non-portable plugins and settings
   source $HOME/.vim_vundle_noport.vim
