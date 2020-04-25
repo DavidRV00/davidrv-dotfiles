@@ -5,15 +5,12 @@ set nocompatible
 " Basic options "
 "==============="
 
-set background=dark
-"set t_Co=256
-colorscheme delek
 set tabpagemax=300
 set splitbelow
 set splitright
 set number
-set cursorline
 set clipboard=unnamedplus
+set linebreak
 
 " For some reason, for Go formatting I need to copy these lines into
 " ~/.vim/after/ftplugin/go.vim
@@ -28,6 +25,9 @@ augroup setpath
   autocmd BufNewFile,BufEnter * silent! lcd %:p:h
 augroup END
 let g:netrw_keepdir=0
+
+" Automatically equalize panes when resizing
+autocmd VimResized * wincmd =
 
 " Remove trailing whitespace on save
 function! RemoveWhitespace()
@@ -151,7 +151,7 @@ inoremap ] <c-r>=ClosePair(']')<CR>
 "inoremap } <c-r>=CloseBracket()<CR>
 inoremap } <c-r>=ClosePair('}')<CR>
 inoremap " <c-r>=QuoteDelim('"')<CR>
-inoremap ' <c-r>=QuoteDelim("'")<CR>
+"inoremap ' <c-r>=QuoteDelim("'")<CR>
 augroup htmlcarrots
   autocmd Syntax html,vim inoremap < <lt>><Esc>i| inoremap > <c-r>=ClosePair('>')<CR>
 augroup END
@@ -190,10 +190,10 @@ endf
 " Change cursor depending on mode
 let &t_SI = "\e[6 q"
 let &t_EI = "\e[2 q"
-"augroup myCmds
-"au!
-"autocmd VimEnter * silent !echo -ne "\e[2 q"
-"augroup END
+augroup myCmds
+  au!
+  autocmd VimEnter * silent !echo -ne "\e[2 q"; echo ''
+augroup END
 
 
 " Maps
@@ -203,6 +203,10 @@ inoremap kj <Esc>
 inoremap <leader>w <Esc>:<C-u>w<CR>
 nnoremap <leader>w :<C-u>w<CR>
 nnoremap <leader>sv :<C-u>source ~/.vimrc<CR>
+nnoremap <leader>v :<C-u>vsplit<CR>
+nnoremap <leader>b :<C-u>split<CR>
+nnoremap <leader><Tab> :<C-u>tabnew .<CR>
+nnoremap <leader>e :<C-u>e<Space>
 nnoremap <PageUp> gt
 nnoremap <PageDown> gT
 nnoremap <Tab> gt
@@ -324,6 +328,13 @@ if isdirectory(expand('$HOME/.vim/bundle/Vundle.vim'))
 
   " Highlight instances of current word
   "Plugin 'dominikduda/vim_current_word'
+  "
+  " Colorschemes
+  Plugin 'flazz/vim-colorschemes'
+
+  " Airline
+  Plugin 'vim-airline/vim-airline'
+  Plugin 'vim-airline/vim-airline-themes'
 
   " Load non-portable plugins and settings
   source $HOME/.vim_vundle_noport.vim
@@ -341,6 +352,19 @@ source $HOME/.vim_noport.vim
 filetype plugin indent on
 syntax on
 
+" Notebook conceal
+augroup py
+  "autocmd BufNewFile,BufRead *.py,*.r,*.R :syntax match Normal '^# In\[.*\]:.*' conceal cchar=_
+  "autocmd BufNewFile,BufRead *.py,*.r,*.R :syntax match Normal '^# In\[.*\]:.*' conceal cchar=¶
+  "autocmd BufNewFile,BufRead *.py,*.r,*.R :syntax match Normal '^# In\[.*\]:.*' conceal cchar=»
+  autocmd BufNewFile,BufRead *.py,*.r,*.R :syntax match Normal '^# In\[.*\]:.*' conceal cchar=―
+  "autocmd BufNewFile,BufRead *.py,*.r,*.R :syntax match Normal '^# In\[.*\]:.*' conceal cchar=━
+  "autocmd BufNewFile,BufRead *.py,*.r,*.R :syntax match Normal '^# In\[.*\]:.*' conceal cchar=┈
+  "autocmd BufNewFile,BufRead *.py,*.r,*.R :syntax match Normal '^# In\[.*\]:.*' conceal cchar=⎯
+  autocmd BufNewFile,BufRead *.py,*.r,*.R :set conceallevel=1
+  autocmd BufNewFile,BufRead *.py,*.r,*.R :set concealcursor=nc
+augroup END
+
 " Auto-write latex files if cursor is held still (then vimtex compiles on save)
 augroup tex
   autocmd BufNewFile,BufRead *.tex :VimtexCompile
@@ -349,7 +373,26 @@ augroup tex
   autocmd CursorHoldI *.tex :update
 augroup END
 
-hi! link QuickFixLine PmenuSel
-hi! LineNr ctermbg=darkblue ctermfg=white
-hi! CursorLineNr ctermbg=blue ctermfg=black
-hi! CursorLine cterm=NONE ctermbg=0x010101 guibg=darkred
+" Auto draw graphviz files
+augroup gv
+  autocmd BufWritePost *.gv :silent !dot -Tpng % -o %.png
+augroup END
+
+" Appearance
+set background=dark
+
+colorscheme Atelier_CaveDark
+let g:airline_theme='base16_eighties'
+
+set cursorline
+
+"hi! link QuickFixLine PmenuSel
+"""hi! LineNr ctermbg=black ctermfg=white
+hi! LineNr ctermbg=233 "ctermfg=white
+"""hi! CursorLineNr ctermbg=blue ctermfg=black
+hi! CursorLineNr ctermbg=16 ctermfg=139
+"""hi! CursorLine cterm=NONE ctermbg=black guibg=darkred
+hi! CursorLine cterm=NONE ctermbg=233 guibg=darkred
+"""hi! Conceal ctermbg=233 ctermfg=black
+"hi! Conceal ctermbg=232 ctermfg=black
+hi! Conceal ctermfg=232
