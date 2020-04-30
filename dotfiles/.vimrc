@@ -152,9 +152,9 @@ inoremap ] <c-r>=ClosePair(']')<CR>
 inoremap } <c-r>=ClosePair('}')<CR>
 inoremap " <c-r>=QuoteDelim('"')<CR>
 "inoremap ' <c-r>=QuoteDelim("'")<CR>
-augroup htmlcarrots
-  autocmd Syntax html,vim inoremap < <lt>><Esc>i| inoremap > <c-r>=ClosePair('>')<CR>
-augroup END
+"augroup htmlcarrots
+"  autocmd Syntax html,vim inoremap < <lt>><Esc>i| inoremap > <c-r>=ClosePair('>')<CR>
+"augroup END
 
 function! ClosePair(char)
   if getline('.')[col('.') - 1] == a:char
@@ -205,8 +205,9 @@ nnoremap <leader>w :<C-u>w<CR>
 nnoremap <leader>sv :<C-u>source ~/.vimrc<CR>
 nnoremap <leader>v :<C-u>vsplit<CR>
 nnoremap <leader>b :<C-u>split<CR>
-nnoremap <leader><Tab> :<C-u>tabnew .<CR>
+nnoremap <leader>t :<C-u>tabnew .<CR>
 nnoremap <leader>e :<C-u>e<Space>
+nnoremap === <C-w>=
 nnoremap <PageUp> gt
 nnoremap <PageDown> gT
 nnoremap <Tab> gt
@@ -336,6 +337,11 @@ if isdirectory(expand('$HOME/.vim/bundle/Vundle.vim'))
   Plugin 'vim-airline/vim-airline'
   Plugin 'vim-airline/vim-airline-themes'
 
+  " Better opening from quickfix
+  Plugin 'yssl/QFEnter'
+
+  Plugin 'vim-scripts/vcscommand.vim'
+
   " Load non-portable plugins and settings
   source $HOME/.vim_vundle_noport.vim
 
@@ -381,18 +387,34 @@ augroup END
 " Appearance
 set background=dark
 
-colorscheme Atelier_CaveDark
-let g:airline_theme='base16_eighties'
+"colorscheme Atelier_CaveDark
+colorscheme 1989
+"let g:airline_theme='base16_eighties'
+"let g:airline_theme='base16_ashes'
+"let g:airline_theme='badwolf'
+"let g:airline_theme='behelit'
+"let g:airline_theme='biogoo'
+let g:airline_theme='fairyfloss'
+"let g:airline_theme='jet'
 
 set cursorline
 
 "hi! link QuickFixLine PmenuSel
 """hi! LineNr ctermbg=black ctermfg=white
-hi! LineNr ctermbg=233 "ctermfg=white
+hi! LineNr ctermbg=233
 """hi! CursorLineNr ctermbg=blue ctermfg=black
 hi! CursorLineNr cterm=NONE ctermbg=16 ctermfg=139
-"""hi! CursorLine cterm=NONE ctermbg=black guibg=darkred
-hi! CursorLine cterm=NONE ctermbg=233 guibg=darkred
+"""hi! CursorLine cterm=NONE ctermbg=black
+hi! CursorLine cterm=NONE ctermbg=235
 """hi! Conceal ctermbg=233 ctermfg=black
 "hi! Conceal ctermbg=232 ctermfg=black
 hi! Conceal ctermfg=232
+"hi TabLineFill ctermfg=darkgray ctermbg=darkgray
+hi TabLineFill ctermfg=233 ctermbg=233
+hi TabLineSel ctermbg=16 ctermfg=139
+hi TabLine ctermbg=235
+hi TabNum ctermbg=233 ctermfg=139
+hi Pmenu ctermbg=233
+hi PmenuSel ctermbg=16 ctermfg=139
+"hi VertSplit ctermbg=236 ctermfg=236
+hi VertSplit ctermbg=235 ctermfg=235
