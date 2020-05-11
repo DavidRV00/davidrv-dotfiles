@@ -208,7 +208,7 @@ exec dex -ae i3
 #}
 
 # Open internet browser
-bindsym $mod+i exec google-chrome
+bindsym $mod+i exec chromium
 
 # Open file manager
 bindsym $mod+m exec pcmanfm
