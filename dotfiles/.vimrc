@@ -392,9 +392,9 @@ colorscheme 1989
 "let g:airline_theme='base16_eighties'
 "let g:airline_theme='base16_ashes'
 "let g:airline_theme='badwolf'
-"let g:airline_theme='behelit'
+let g:airline_theme='behelit'
 "let g:airline_theme='biogoo'
-let g:airline_theme='fairyfloss'
+"let g:airline_theme='fairyfloss'
 "let g:airline_theme='jet'
 
 set cursorline
