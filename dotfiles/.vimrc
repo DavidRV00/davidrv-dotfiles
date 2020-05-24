@@ -11,6 +11,11 @@ set splitright
 set number
 set clipboard=unnamedplus
 set linebreak
+set relativenumber
+"set showtabline=1
+set showtabline=2
+set mouse=a
+set ttymouse=xterm2
 
 " For some reason, for Go formatting I need to copy these lines into
 " ~/.vim/after/ftplugin/go.vim
@@ -21,12 +26,21 @@ set shiftwidth=2
 cmap w!! w !sudo tee > /dev/null %
 
 " Automatically change the working path to the path of the current file.
+" Really only want this for working in very large directory structure where you
+" might have multiple 'homes'.
 augroup setpath
   autocmd BufNewFile,BufEnter * silent! lcd %:p:h
 augroup END
 let g:netrw_keepdir=0
 
+" Don't let netrw screw up line numbering
+let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
+
+" Tree view in netrw
+let g:netrw_liststyle=3
+
 " Automatically equalize panes when resizing
+" Is it not possible to keep things proportionally sized?
 autocmd VimResized * wincmd =
 
 " Remove trailing whitespace on save
@@ -51,48 +65,18 @@ function! WrapForTmux(s)
   if !exists('$TMUX')
     return a:s
   endif
-
   let tmux_start = "\<Esc>Ptmux;"
   let tmux_end = "\<Esc>\\"
-
   return tmux_start . substitute(a:s, "\<Esc>", "\<Esc>\<Esc>", 'g') . tmux_end
 endfunction
-
 let &t_SI .= WrapForTmux("\<Esc>[?2004h")
 let &t_EI .= WrapForTmux("\<Esc>[?2004l")
-
 function! XTermPasteBegin()
   set pastetoggle=<Esc>[201~
   set paste
   return ""
 endfunction
-
 inoremap <special> <expr> <Esc>[200~ XTermPasteBegin()
-
-" Relative line numbers in current tab, absolute in other tabs
-if has('autocmd')
-augroup vimrc_linenumbering
-  autocmd!
-  autocmd WinLeave *
-  \ if &number |
-  \   set norelativenumber |
-  \ endif
-  autocmd WinEnter *
-  \ if &number |
-  \   set relativenumber |
-  \ endif
-  autocmd VimEnter *
-  \ if &number |
-  \   set relativenumber |
-  \ endif
-augroup END
-endif
-
-" Don't let netrw screw up line numbering
-let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
-
-" Tree view in netrw
-let g:netrw_liststyle=3
 
 " Rename tabs to show tab number.
 " (Based on http://stackoverflow.com/questions/5927952
@@ -110,10 +94,9 @@ if exists("+showtabline")
       let s .= (i == t ? '%1*' : '%2*')
       let s .= ' '
       let wn = tabpagewinnr(i,'$')
-
       let s .= '%#TabNum#'
       let s .= i
-      " let s .= '%*'
+      "let s .= '%*'
       let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
       let bufnr = buflist[winnr - 1]
       let file = bufname(bufnr)
@@ -137,9 +120,45 @@ if exists("+showtabline")
   endfunction
   set stal=2
   set tabline=%!MyTabLine()
-  set showtabline=1
+  "set showtabline=1
+  set showtabline=2
   highlight link TabNum Special
 endif
+
+" Maps
+let mapleader = "-"
+let maplocalleader = ";"
+inoremap kj <Esc>
+inoremap <leader>w <Esc>:<C-u>w<CR>
+nnoremap <leader>w :<C-u>w<CR>
+nnoremap <leader>sv :<C-u>source ~/.vimrc<CR>
+nnoremap <leader>v :<C-u>vsplit<CR>
+nnoremap <leader>b :<C-u>split<CR>
+nnoremap <leader>t :<C-u>tabnew .<CR>
+nnoremap <leader>e :<C-u>e<Space>
+nnoremap === <C-w>=
+nnoremap <PageUp> gt
+nnoremap <PageDown> gT
+nnoremap gr gT
+"nnoremap <Tab> gt
+"nnoremap <S-Tab> gT
+nnoremap <leader>lc :set cursorline!<CR>
+nnoremap <leader>z vi{zf
+" Are the p ones really necessary? They might just paste FROM reg 0, meanwhile
+" the d one already has deleting TO reg 0 (incl in p and c) covered.
+"vnoremap p "0p
+"vnoremap P "0P
+"nnoremap d "0d
+nnoremap <leader>] :cn<CR>
+nnoremap <leader>[ :cp<CR>
+nnoremap <leader>sb :<C-u>sb<Space>
+"nnoremap <leader>eb :<C-u>b<Space>
+nnoremap <leader>B :<C-u>:ls<CR>:b<Space>
+nnoremap <leader>nt :Ntree<CR>ggj
+nnoremap vgr :vimgrep /
+nnoremap cl :<C-u>pclose <bar> lclose <bar> cclose<CR>
+nnoremap co :<C-u>copen<CR>
+nnoremap <leader>ct :execute "set colorcolumn=" . (&colorcolumn == "" ? "101" : "")<CR>
 
 " Autoclose parens, brackets, etc...
 inoremap ( ()<Esc>i
@@ -195,33 +214,6 @@ augroup myCmds
   autocmd VimEnter * silent !echo -ne "\e[2 q"; echo ''
 augroup END
 
-
-" Maps
-let mapleader = "-"
-let maplocalleader = ";"
-inoremap kj <Esc>
-inoremap <leader>w <Esc>:<C-u>w<CR>
-nnoremap <leader>w :<C-u>w<CR>
-nnoremap <leader>sv :<C-u>source ~/.vimrc<CR>
-nnoremap <leader>v :<C-u>vsplit<CR>
-nnoremap <leader>b :<C-u>split<CR>
-nnoremap <leader>t :<C-u>tabnew .<CR>
-nnoremap <leader>e :<C-u>e<Space>
-nnoremap === <C-w>=
-nnoremap <PageUp> gt
-nnoremap <PageDown> gT
-nnoremap <Tab> gt
-nnoremap <S-Tab> gT
-nnoremap <leader>lc :set cursorline!<CR>
-nnoremap <leader>z vi{zf
-" Are the p ones really necessary? They might just paste FROM reg 0, meanwhile
-" the d one already has deleting TO reg 0 (incl in p and c) covered.
-"vnoremap p "0p
-"vnoremap P "0P
-"nnoremap d "0d
-nnoremap <leader>] :cn<CR>
-nnoremap <leader>[ :cp<CR>
-
 " Edit and run jupyter-notebook-style scripts from Vim
 source $HOME/.vim/jupyterrun.vim
 
@@ -268,6 +260,7 @@ if isdirectory(expand('$HOME/.vim/bundle/Vundle.vim'))
   Plugin 'scrooloose/nerdcommenter' " Better commenting
   let g:NERDCommentEmptyLines = 1
   let g:NERDDefaultAlign = 'left'
+  let g:NERDToggleCheckAllLines = 1
 
   " Smooth navigation between tmux panes and vim buffers with ctrl-direction
   Plugin 'christoomey/vim-tmux-navigator'
@@ -388,7 +381,10 @@ augroup END
 set background=dark
 
 "colorscheme Atelier_CaveDark
-colorscheme 1989
+"colorscheme 1989
+"colorscheme OceanicNext
+colorscheme blues
+
 "let g:airline_theme='base16_eighties'
 "let g:airline_theme='base16_ashes'
 "let g:airline_theme='badwolf'
@@ -396,25 +392,62 @@ let g:airline_theme='behelit'
 "let g:airline_theme='biogoo'
 "let g:airline_theme='fairyfloss'
 "let g:airline_theme='jet'
+"let g:airline_theme='base16_google'
+
+let g:airline_section_z = airline#section#create_right(['%l','%c'])
+
+"function! AirlineInit()
+"  "let g:airline_section_a = airline#section#create(['filetype'])
+"  "let g:airline_section_z = ""
+"  "let g:airline_section_z = airline#section#create_right(['%l','%c'])
+"endfunction
+"autocmd VimEnter * call AirlineInit()
 
 set cursorline
 
+"let &colorcolumn=join(range(101,999),",")
+
+"hi! ColorColumn ctermbg=234
+hi! ColorColumn ctermbg=232
 "hi! link QuickFixLine PmenuSel
 """hi! LineNr ctermbg=black ctermfg=white
-hi! LineNr ctermbg=233
+"hi! LineNr ctermbg=233
+hi! LineNr ctermbg=234
 """hi! CursorLineNr ctermbg=blue ctermfg=black
-hi! CursorLineNr cterm=NONE ctermbg=16 ctermfg=139
-"""hi! CursorLine cterm=NONE ctermbg=black
-hi! CursorLine cterm=NONE ctermbg=235
+hi! CursorLineNr cterm=NONE ctermbg=236 ctermfg=39
+hi! CursorLine cterm=NONE ctermbg=233
+"hi! CursorLine cterm=NONE ctermbg=234
+"hi! CursorLine cterm=NONE ctermbg=235
+"hi! CursorLine cterm=NONE ctermbg=236
 """hi! Conceal ctermbg=233 ctermfg=black
 "hi! Conceal ctermbg=232 ctermfg=black
 hi! Conceal ctermfg=232
-"hi TabLineFill ctermfg=darkgray ctermbg=darkgray
-hi TabLineFill ctermfg=233 ctermbg=233
-hi TabLineSel ctermbg=16 ctermfg=139
-hi TabLine ctermbg=235
-hi TabNum ctermbg=233 ctermfg=139
-hi Pmenu ctermbg=233
-hi PmenuSel ctermbg=16 ctermfg=139
-"hi VertSplit ctermbg=236 ctermfg=236
-hi VertSplit ctermbg=235 ctermfg=235
+"hi! TabLineFill ctermfg=darkgray ctermbg=darkgray
+"hi! TabLineFill ctermfg=233 ctermbg=233
+"hi! TabLineSel ctermbg=16 ctermfg=139
+"hi! TabLineFill ctermfg=16 ctermbg=16
+hi! TabLineFill ctermfg=234 ctermbg=234
+"hi! TabLineSel ctermbg=233 ctermfg=39
+hi! TabLineSel ctermbg=236 ctermfg=39
+hi! TabLine ctermbg=234 cterm=None
+hi! TabNum ctermbg=234 ctermfg=39
+"hi! Pmenu ctermbg=233
+"hi! Pmenu ctermbg=232
+hi! Pmenu ctermbg=24 ctermfg=16
+hi! PmenuSel ctermbg=16 ctermfg=39
+"hi! VertSplit ctermbg=236 ctermfg=236
+"hi! VertSplit ctermbg=233 ctermfg=233
+"hi! VertSplit ctermbg=232 ctermfg=232
+hi! VertSplit ctermbg=16 ctermfg=16
+hi! SignColumn ctermbg=233
+"hi! EndOfBuffer ctermbg=236
+"hi! EndOfBuffer ctermbg=235
+"hi! EndOfBuffer ctermbg=234
+hi! EndOfBuffer ctermbg=232
+"hi! NonText ctermbg=233 ctermfg=233
+"hi! StatusLine ctermfg=233 ctermbg=237
+"hi! StatusLine ctermfg=8 ctermbg=234
+hi! StatusLine ctermfg=247 ctermbg=16
+"hi! StatusLineNC ctermfg=232 ctermbg=232
+hi! StatusLineNC ctermfg=16 ctermbg=16
+hi! WildMenu ctermbg=236 ctermfg=39
