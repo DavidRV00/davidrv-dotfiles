@@ -38,10 +38,6 @@ let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 " Tree view in netrw
 let g:netrw_liststyle=3
 
-" Automatically equalize panes when resizing
-" Is it not possible to keep things proportionally sized?
-autocmd VimResized * wincmd =
-
 " Remove trailing whitespace on save
 function! RemoveWhitespace()
   let save_pos = getpos(".")

@@ -217,11 +217,6 @@ exec dex -ae i3
 #        status_command i3status
 #}
 
-# Open internet browser
-#bindsym $mod+i exec "qutebrowser --nowindow ':open;; set-cmd-text -s :open'"
-bindsym $mod+i exec "qutebrowser"
-bindsym $mod+Shift+i exec "qutebrowser --nowindow ':open -p'"
-
 # Open file manager
 bindsym $mod+m exec "i3-sensible-terminal -e 'tmux new-session ranger $HOME'"
 bindsym $mod+Shift+m exec pcmanfm
