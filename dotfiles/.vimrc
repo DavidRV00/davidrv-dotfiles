@@ -33,15 +33,13 @@ augroup setpath
 augroup END
 let g:netrw_keepdir=0
 
+"let g:netrw_keepj=""
+
 " Don't let netrw screw up line numbering
 let g:netrw_bufsettings = 'noma nomod nu nobl nowrap ro'
 
 " Tree view in netrw
 let g:netrw_liststyle=3
-
-" Automatically equalize panes when resizing
-" Is it not possible to keep things proportionally sized?
-autocmd VimResized * wincmd =
 
 " Remove trailing whitespace on save
 function! RemoveWhitespace()
@@ -137,11 +135,14 @@ nnoremap <leader>b :<C-u>split<CR>
 nnoremap <leader>t :<C-u>tabnew .<CR>
 nnoremap <leader>e :<C-u>e<Space>
 nnoremap === <C-w>=
+nnoremap __ <C-w>_
+nnoremap \|\| <C-w>\|
 nnoremap <PageUp> gt
 nnoremap <PageDown> gT
 nnoremap gr gT
 "nnoremap <Tab> gt
 "nnoremap <S-Tab> gT
+nnoremap tc :tabclose<CR>
 nnoremap <leader>lc :set cursorline!<CR>
 nnoremap <leader>z vi{zf
 " Are the p ones really necessary? They might just paste FROM reg 0, meanwhile
@@ -153,12 +154,20 @@ nnoremap <leader>] :cn<CR>
 nnoremap <leader>[ :cp<CR>
 nnoremap <leader>sb :<C-u>sb<Space>
 "nnoremap <leader>eb :<C-u>b<Space>
-nnoremap <leader>B :<C-u>:ls<CR>:b<Space>
+nnoremap <leader>B :<C-u>ls<CR>:b<Space>
+nnoremap <leader>M :<C-u>marks<CR>:norm! '
 nnoremap <leader>nt :Ntree<CR>ggj
-nnoremap vgr :vimgrep /
+nnoremap <leader>G :vimgrep //g **/*<Left><Left><Left><Left><Left><Left><Left>
+nnoremap <leader>S :%s//g<Left><Left>
+vnoremap <leader>S :s//g<Left><Left>
 nnoremap cl :<C-u>pclose <bar> lclose <bar> cclose<CR>
 nnoremap co :<C-u>copen<CR>
 nnoremap <leader>ct :execute "set colorcolumn=" . (&colorcolumn == "" ? "101" : "")<CR>
+cnoremap kj <C-c>
+cnoremap fn ^func<Space>.*
+cnoremap \( \(\)<Left><Left>
+cnoremap \< \<\><Left><Left>
+inoremap <leader>db log.Infof("") // DEBUGGING<Esc>?"<Cr>i
 
 " Autoclose parens, brackets, etc...
 inoremap ( ()<Esc>i
@@ -170,10 +179,24 @@ inoremap ] <c-r>=ClosePair(']')<CR>
 "inoremap } <c-r>=CloseBracket()<CR>
 inoremap } <c-r>=ClosePair('}')<CR>
 inoremap " <c-r>=QuoteDelim('"')<CR>
+inoremap ` <c-r>=QuoteDelim('`')<CR>
 "inoremap ' <c-r>=QuoteDelim("'")<CR>
 "augroup htmlcarrots
 "  autocmd Syntax html,vim inoremap < <lt>><Esc>i| inoremap > <c-r>=ClosePair('>')<CR>
 "augroup END
+
+" Function text object (only works in Go)
+vnoremap af <Esc>:silent! normal! l<CR>?^func <CR>V$%
+vmap if <Esc>:silent! normal! l<CR>?^func <CR>$vi{
+omap af :normal Vaf<CR>
+omap if :normal Vif<CR>
+
+" Search only within visual selection
+vnoremap <leader>/ <Esc>/\%V
+vnoremap <leader>? <Esc>?\%V
+
+" Select between x and y marks
+vnoremap xy <Esc>`xv`y
 
 function! ClosePair(char)
   if getline('.')[col('.') - 1] == a:char
@@ -277,12 +300,12 @@ if isdirectory(expand('$HOME/.vim/bundle/Vundle.vim'))
   let g:UltiSnipsExpandTrigger="<nop>"
   let g:ulti_expand_or_jump_res = 0
   function! <SID>ExpandSnippetOrReturn()
-  let snippet = UltiSnips#ExpandSnippetOrJump()
-  if g:ulti_expand_or_jump_res > 0
-    return snippet
-  else
-    return "\<CR>"
-  endif
+    let snippet = UltiSnips#ExpandSnippetOrJump()
+    if g:ulti_expand_or_jump_res > 0
+      return snippet
+    else
+      return "\<CR>"
+    endif
   endfunction
   inoremap <expr> <CR> pumvisible() ? "<C-R>=<SID>ExpandSnippetOrReturn()<CR>" : "\<CR>"
 
@@ -407,14 +430,21 @@ set cursorline
 
 "let &colorcolumn=join(range(101,999),",")
 
+augroup colorenter
+  autocmd WinEnter * set cursorline
+  autocmd WinLeave * set nocursorline
+augroup END
+
+hi! Normal ctermfg=231 ctermbg=NONE
+"hi! Normal ctermfg=255
 "hi! ColorColumn ctermbg=234
 hi! ColorColumn ctermbg=232
 "hi! link QuickFixLine PmenuSel
 """hi! LineNr ctermbg=black ctermfg=white
 "hi! LineNr ctermbg=233
-hi! LineNr ctermbg=234
+hi! LineNr ctermbg=234 ctermfg=240
 """hi! CursorLineNr ctermbg=blue ctermfg=black
-hi! CursorLineNr cterm=NONE ctermbg=236 ctermfg=39
+hi! CursorLineNr cterm=NONE ctermbg=235 ctermfg=39
 hi! CursorLine cterm=NONE ctermbg=233
 "hi! CursorLine cterm=NONE ctermbg=234
 "hi! CursorLine cterm=NONE ctermbg=235
@@ -436,18 +466,22 @@ hi! TabNum ctermbg=234 ctermfg=39
 hi! Pmenu ctermbg=24 ctermfg=16
 hi! PmenuSel ctermbg=16 ctermfg=39
 "hi! VertSplit ctermbg=236 ctermfg=236
+hi! VertSplit ctermbg=234 ctermfg=234
 "hi! VertSplit ctermbg=233 ctermfg=233
 "hi! VertSplit ctermbg=232 ctermfg=232
-hi! VertSplit ctermbg=16 ctermfg=16
-hi! SignColumn ctermbg=233
+"hi! VertSplit ctermbg=16 ctermfg=16
+hi! SignColumn ctermbg=234
 "hi! EndOfBuffer ctermbg=236
 "hi! EndOfBuffer ctermbg=235
 "hi! EndOfBuffer ctermbg=234
 hi! EndOfBuffer ctermbg=232
 "hi! NonText ctermbg=233 ctermfg=233
 "hi! StatusLine ctermfg=233 ctermbg=237
-"hi! StatusLine ctermfg=8 ctermbg=234
-hi! StatusLine ctermfg=247 ctermbg=16
+hi! StatusLine ctermfg=8 ctermbg=234
+"hi! StatusLine ctermfg=247 ctermbg=16
 "hi! StatusLineNC ctermfg=232 ctermbg=232
-hi! StatusLineNC ctermfg=16 ctermbg=16
+"hi! StatusLineNC ctermfg=16 ctermbg=16
+hi! StatusLineNC ctermfg=234 ctermbg=234
 hi! WildMenu ctermbg=236 ctermfg=39
+hi! Folded ctermbg=233
+"hi! Visual ctermbg=233 cterm=none

@@ -207,9 +207,6 @@ exec dex -ae i3
 #        status_command i3status
 #}
 
-# Open internet browser
-bindsym $mod+i exec chromium
-
 # Open file manager
 bindsym $mod+m exec pcmanfm
 
