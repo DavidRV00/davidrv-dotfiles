@@ -12,8 +12,7 @@ set number
 set clipboard=unnamedplus
 set linebreak
 set relativenumber
-"set showtabline=1
-set showtabline=2
+set showtabline=1
 set mouse=a
 set ttymouse=xterm2
 
@@ -89,10 +88,11 @@ if exists("+showtabline")
       let buflist = tabpagebuflist(i)
       let winnr = tabpagewinnr(i)
       let s .= '%' . i . 'T'
-      let s .= (i == t ? '%1*' : '%2*')
-      let s .= ' '
+      "let s .= (i == t ? '%1*' : '%2*')
+      "let s .= ' '
       let wn = tabpagewinnr(i,'$')
-      let s .= '%#TabNum#'
+      "let s .= '%#TabNum#'
+      let s .= (i == t ? '%#TabLineSel#' : '%#TabNum#')
       let s .= i
       "let s .= '%*'
       let s .= (i == t ? '%#TabLineSel#' : '%#TabLine#')
@@ -109,17 +109,18 @@ if exists("+showtabline")
       if file == ''
         let file = '[No Name]'
       endif
-      let s .= ' ' . file . ' '
+      let s .= ':' . file . '%#TabLine# '
       let i = i + 1
     endwhile
     let s .= '%T%#TabLineFill#%='
     let s .= (tabpagenr('$') > 1 ? '%999XX' : 'X')
+    let s .= '%#TabLineSel# vim '
     return s
   endfunction
   set stal=2
   set tabline=%!MyTabLine()
-  "set showtabline=1
-  set showtabline=2
+  set showtabline=1
+  "set showtabline=2
   highlight link TabNum Special
 endif
 
@@ -127,6 +128,7 @@ endif
 let mapleader = "-"
 let maplocalleader = ";"
 inoremap kj <Esc>
+vnoremap KJ <Esc>
 inoremap <leader>w <Esc>:<C-u>w<CR>
 nnoremap <leader>w :<C-u>w<CR>
 nnoremap <leader>sv :<C-u>source ~/.vimrc<CR>
@@ -157,9 +159,11 @@ nnoremap <leader>sb :<C-u>sb<Space>
 nnoremap <leader>B :<C-u>ls<CR>:b<Space>
 nnoremap <leader>M :<C-u>marks<CR>:norm! '
 nnoremap <leader>nt :Ntree<CR>ggj
-nnoremap <leader>G :vimgrep //g **/*<Left><Left><Left><Left><Left><Left><Left>
 nnoremap <leader>S :%s//g<Left><Left>
 vnoremap <leader>S :s//g<Left><Left>
+nnoremap <leader>fm :!ranger $PWD<CR>
+nnoremap <leader>G :vimgrep //g **/*<Left><Left><Left><Left><Left><Left><Left>
+nnoremap <leader>X :!sudo chmod a+x %<CR>
 nnoremap cl :<C-u>pclose <bar> lclose <bar> cclose<CR>
 nnoremap co :<C-u>copen<CR>
 nnoremap <leader>ct :execute "set colorcolumn=" . (&colorcolumn == "" ? "101" : "")<CR>
@@ -417,6 +421,8 @@ let g:airline_theme='behelit'
 "let g:airline_theme='jet'
 "let g:airline_theme='base16_google'
 
+"let g:airline_section_c = airline#section#create(['%-20f'])
+"let g:airline_section_gutter = airline#section#create([' ---------------------------- %='])
 let g:airline_section_z = airline#section#create_right(['%l','%c'])
 
 "function! AirlineInit()
@@ -435,53 +441,23 @@ augroup colorenter
   autocmd WinLeave * set nocursorline
 augroup END
 
-hi! Normal ctermfg=231 ctermbg=NONE
-"hi! Normal ctermfg=255
-"hi! ColorColumn ctermbg=234
 hi! ColorColumn ctermbg=232
-"hi! link QuickFixLine PmenuSel
-"""hi! LineNr ctermbg=black ctermfg=white
-"hi! LineNr ctermbg=233
-hi! LineNr ctermbg=234 ctermfg=240
-"""hi! CursorLineNr ctermbg=blue ctermfg=black
-hi! CursorLineNr cterm=NONE ctermbg=235 ctermfg=39
+hi! LineNr ctermbg=232 ctermfg=236
+hi! CursorLineNr cterm=NONE ctermbg=232 ctermfg=68
 hi! CursorLine cterm=NONE ctermbg=233
-"hi! CursorLine cterm=NONE ctermbg=234
-"hi! CursorLine cterm=NONE ctermbg=235
-"hi! CursorLine cterm=NONE ctermbg=236
-"""hi! Conceal ctermbg=233 ctermfg=black
-"hi! Conceal ctermbg=232 ctermfg=black
-hi! Conceal ctermfg=232
-"hi! TabLineFill ctermfg=darkgray ctermbg=darkgray
-"hi! TabLineFill ctermfg=233 ctermbg=233
-"hi! TabLineSel ctermbg=16 ctermfg=139
-"hi! TabLineFill ctermfg=16 ctermbg=16
 hi! TabLineFill ctermfg=234 ctermbg=234
-"hi! TabLineSel ctermbg=233 ctermfg=39
-hi! TabLineSel ctermbg=236 ctermfg=39
+hi! TabLineSel ctermbg=236 ctermfg=75
 hi! TabLine ctermbg=234 cterm=None
-hi! TabNum ctermbg=234 ctermfg=39
-"hi! Pmenu ctermbg=233
-"hi! Pmenu ctermbg=232
+hi! TabNum ctermbg=234 ctermfg=None
 hi! Pmenu ctermbg=24 ctermfg=16
 hi! PmenuSel ctermbg=16 ctermfg=39
-"hi! VertSplit ctermbg=236 ctermfg=236
-hi! VertSplit ctermbg=234 ctermfg=234
-"hi! VertSplit ctermbg=233 ctermfg=233
-"hi! VertSplit ctermbg=232 ctermfg=232
-"hi! VertSplit ctermbg=16 ctermfg=16
-hi! SignColumn ctermbg=234
-"hi! EndOfBuffer ctermbg=236
-"hi! EndOfBuffer ctermbg=235
-"hi! EndOfBuffer ctermbg=234
+hi! Conceal ctermfg=68 ctermbg=NONE
+hi! VertSplit ctermbg=16 ctermfg=16
+hi! SignColumn ctermbg=233
 hi! EndOfBuffer ctermbg=232
-"hi! NonText ctermbg=233 ctermfg=233
-"hi! StatusLine ctermfg=233 ctermbg=237
-hi! StatusLine ctermfg=8 ctermbg=234
-"hi! StatusLine ctermfg=247 ctermbg=16
-"hi! StatusLineNC ctermfg=232 ctermbg=232
-"hi! StatusLineNC ctermfg=16 ctermbg=16
-hi! StatusLineNC ctermfg=234 ctermbg=234
+hi! StatusLine ctermfg=247 ctermbg=16
+hi! StatusLineNC ctermfg=16 ctermbg=16
 hi! WildMenu ctermbg=236 ctermfg=39
 hi! Folded ctermbg=233
 "hi! Visual ctermbg=233 cterm=none
+"hi! link QuickFixLine PmenuSel

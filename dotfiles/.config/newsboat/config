@@ -1,7 +1,10 @@
-#show-read-feeds no
-auto-reload yes
+show-read-feeds yes
+feed-sort-order lastupdated
 
-external-url-viewer "urlscan -dc -r 'google-chrome {}'"
+auto-reload yes
+reload-time 5
+
+external-url-viewer "urlscan -dc -r 'qutebrowser {}'"
 
 bind-key j down
 bind-key k up
@@ -14,27 +17,28 @@ bind-key g home
 bind-key d pagedown
 bind-key u pageup
 bind-key l open
-#bind-key h quit
+bind-key h quit
 #bind-key a toggle-article-read
 bind-key n next-unread
 bind-key N prev-unread
 #bind-key D pb-download
 bind-key U show-urls
 #bind-key x pb-delete
+bind-key L toggle-show-read-feeds
 
-#color listnormal cyan default
-#color listfocus black yellow standout bold
-#color listnormal_unread blue default
-#color listfocus_unread yellow default bold
-#color info red black bold
-#color article cyan default
+color listnormal black default
+color listfocus black yellow standout bold
+color listnormal_unread blue default
+color listfocus_unread yellow default bold
+color info red black bold
+color article blue default
 
-browser google-chrome
+browser qutebrowser
 macro , open-in-browser
 #macro t set browser "tsp youtube-dl --add-metadata -ic"; open-in-browser ; set browser google-chrome
 #macro a set browser "tsp youtube-dl --add-metadata -xic -f bestaudio/best"; open-in-browser ; set browser google-chrome
-macro v set browser "setsid nohup vlc %u > /dev/null &"; open-in-browser ; set browser google-chrome
-#macro v set browser "setsid nohup mpv %u > /dev/null &"; open-in-browser ; set browser google-chrome
+#macro v set browser "setsid nohup vlc %u > /dev/null &"; open-in-browser ; set browser google-chrome
+macro m set browser "setsid nohup umpv %u > /dev/null &"; open-in-browser ; set browser qutebrowser
 #macro w set browser "w3m"; open-in-browser ; set browser google-chrome
 #macro p set browser "dmenuhandler"; open-in-browser ; set browser google-chrome
 #macro c set browser "xsel -b <<<" ; open-in-browser ; set browser google-chrome

@@ -15,7 +15,7 @@ set $sup Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:monospace 8
+font pango:Ubuntu Mono 10
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -29,35 +29,39 @@ font pango:monospace 8
 # font, it doesn’t scale on retina/hidpi displays.
 
 # Colors
-# class                 border  backgr. text    indicator child_border
-#client.focused          #4c7899 #285577 #ffffff #2e9ef4   #285577
-client.focused          #dddddd #dddddd #222222 #dddddd   #dddddd
-client.focused_inactive #333333 #5f676a #ffffff #484e50   #5f676a
-client.unfocused        #333333 #222222 #888888 #292d2e   #222222
-client.urgent           #2f343a #900000 #ffffff #900000   #900000
-client.placeholder      #000000 #0c0c0c #ffffff #000000   #0c0c0c
-
-client.background       #ffffff
+# class                 border  backgr. text    indicator
+client.focused          #5f87d7 #5f87d7 #000000 #5f87d7
+client.focused_inactive #121212 #090909 #ffffff #090909
+client.unfocused        #121212 #090909 #888888 #090909
+client.urgent           #2f343a #900000 #ffffff #900000
+client.placeholder      #090909 #0c0c0c #ffffff #090909
+client.background       #090909
 
 # Use Mouse+$mod to drag floating windows to their wanted position
 floating_modifier $mod
 
 # hide borders adjacent to screen edges
 hide_edge_borders none
+#hide_edge_borders horizontal
 
 # border style
-#for_window [class=".*"] border pixel 3
-for_window [class=".*"] border pixel 1
+for_window [class=".*"] border pixel 2
+
+# Gaps
+gaps inner 2
 
 # start a terminal
-bindsym $mod+Return exec i3-sensible-terminal
+#bindsym $mod+Shift+Return exec i3-sensible-terminal
 # start a terminal in a tmux session
-bindsym $mod+Shift+Return exec "i3-sensible-terminal -e 'tmux'"
+bindsym $mod+Return exec "i3-sensible-terminal -e 'tmux'"
 # start a pair of terminals with twin tmux sessions
-bindsym $mod+Control+Shift+Return exec "name=$(echo '' | dmenu -p 'Name: '); tnewpair $name; i3-sensible-terminal -e 'tmux attach -t '$name'-0'; i3-sensible-terminal -e 'tmux attach -t '$name'-1';"
+bindsym $mod+Control+Shift+Return exec "name=$(echo '' | dmenu -b -p 'Name: '); tnewpair $name; i3-sensible-terminal -e 'tmux attach -t '$name'-0'; i3-sensible-terminal -e 'tmux attach -t '$name'-1';"
 
 # Open a new note
-bindsym $mod+n exec notewindow; exec "bash -c 'sleep 0.2s; i3-msg floating enable;'"
+#bindsym $mod+n exec notewindow; exec "bash -c 'sleep 0.2s; i3-msg floating enable;'"
+
+# Open text editor
+bindsym $mod+Shift+Return exec "i3-sensible-terminal -e 'tmux new-session vim $HOME'"
 
 # open placeholder
 bindsym $mod+p exec "i3-msg open"
@@ -66,11 +70,14 @@ bindsym $mod+p exec "i3-msg open"
 bindsym $mod+Shift+q kill
 
 # start dmenu (a program launcher)
-bindsym $mod+d exec dmenu_run
+bindsym $mod+Shift+semicolon exec dmenu_run -b
 # There also is the (new) i3-dmenu-desktop which only displays applications
 # shipping a .desktop file. It is a wrapper around dmenu, so you need that
 # installed.
 # bindsym $mod+d exec --no-startup-id i3-dmenu-desktop
+
+# kill process
+bindsym $mod+Control+Shift+k exec "echo '' | dmenu -b -p 'killall -v ' | xargs -n1 killall -v"
 
 # change focus
 bindsym $mod+h focus left
@@ -198,6 +205,9 @@ mode "resize" {
 
 bindsym $mod+r mode "resize"
 
+# Turn off wrapping
+focus_wrapping no
+
 # Autostart system services
 exec dex -ae i3
 
@@ -208,7 +218,18 @@ exec dex -ae i3
 #}
 
 # Open file manager
-bindsym $mod+m exec pcmanfm
+bindsym $mod+m exec "i3-sensible-terminal -e 'tmux new-session ranger $HOME'"
+bindsym $mod+Shift+m exec pcmanfm
+
+# Search and play radio
+bindsym $mod+Shift+Control+m exec "icradiomenu"
+
+# Open RSS reader
+bindsym $mod+n exec "i3-sensible-terminal -e 'killall -v newsboat; tmux new-session newsboat'"
+
+# Screenshots
+bindsym --release Print exec "scrot -s $HOME/`date +%Y-%m-%d_%H:%M:%S`.png"
+bindsym --release Control+Print exec "scrot -o -s $HOME/register.png"
 
 # Hide mouse curser when idle
 exec_always --no-startup-id "unclutter -idle 2 -noevents"
