@@ -42,6 +42,11 @@ let g:netrw_liststyle=3
 
 " Remove trailing whitespace on save
 function! RemoveWhitespace()
+  "if &ft =~ 'ruby\|javascript\|perl'
+  if &ft =~ 'vim'
+        return
+  endif
+
   let save_pos = getpos(".")
   execute "normal! :%s/\\s\\+$//e\<cr>"
   call setpos('.', save_pos)
@@ -441,23 +446,31 @@ augroup colorenter
   autocmd WinLeave * set nocursorline
 augroup END
 
+set fillchars+=vert:\ " Note the space
+
+hi! Normal ctermbg=NONE
 hi! ColorColumn ctermbg=232
 hi! LineNr ctermbg=232 ctermfg=236
 hi! CursorLineNr cterm=NONE ctermbg=232 ctermfg=68
 hi! CursorLine cterm=NONE ctermbg=233
 hi! TabLineFill ctermfg=234 ctermbg=234
-hi! TabLineSel ctermbg=236 ctermfg=75
+"hi! TabLineSel ctermbg=236 ctermfg=75
+hi! TabLineSel ctermbg=68 ctermfg=16
 hi! TabLine ctermbg=234 cterm=None
 hi! TabNum ctermbg=234 ctermfg=None
 hi! Pmenu ctermbg=24 ctermfg=16
 hi! PmenuSel ctermbg=16 ctermfg=39
 hi! Conceal ctermfg=68 ctermbg=NONE
-hi! VertSplit ctermbg=16 ctermfg=16
-hi! SignColumn ctermbg=233
+"hi! VertSplit ctermbg=16 ctermfg=16
+hi! VertSplit ctermbg=NONE ctermfg=232
+hi! SignColumn ctermbg=232
 hi! EndOfBuffer ctermbg=232
-hi! StatusLine ctermfg=247 ctermbg=16
-hi! StatusLineNC ctermfg=16 ctermbg=16
-hi! WildMenu ctermbg=236 ctermfg=39
+"hi! StatusLine ctermfg=247 ctermbg=16
+hi! StatusLine ctermfg=247 ctermbg=NONE " Set this dynamically based on whether the menu is up? Or, just make it the same color as the status line?
+"hi! StatusLineNC ctermfg=16 ctermbg=16
+hi! StatusLineNC ctermfg=NONE ctermbg=NONE
+"hi! WildMenu ctermbg=236 ctermfg=39
+hi! WildMenu ctermbg=68 ctermfg=16
 hi! Folded ctermbg=233
 "hi! Visual ctermbg=233 cterm=none
 "hi! link QuickFixLine PmenuSel
