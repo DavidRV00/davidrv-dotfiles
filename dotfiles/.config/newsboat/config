@@ -6,6 +6,10 @@ reload-time 5
 
 external-url-viewer "urlscan -dc -r 'qutebrowser {}'"
 
+bookmark-cmd "~/dev/newsbeuter-dangerzone/bookmark.sh"
+bookmark-interactive yes
+bookmark-autopilot no
+
 bind-key j down
 bind-key k up
 #bind-key j next articlelist
@@ -25,20 +29,22 @@ bind-key N prev-unread
 bind-key U show-urls
 #bind-key x pb-delete
 bind-key L toggle-show-read-feeds
+bind-key / goto-title
 
 color listnormal black default
-color listfocus black yellow standout bold
+color listfocus white default
 color listnormal_unread blue default
-color listfocus_unread yellow default bold
-color info red black bold
+color listfocus_unread white blue
+color info blue black bold
 color article blue default
 
 browser qutebrowser
 macro , open-in-browser
 #macro t set browser "tsp youtube-dl --add-metadata -ic"; open-in-browser ; set browser google-chrome
 #macro a set browser "tsp youtube-dl --add-metadata -xic -f bestaudio/best"; open-in-browser ; set browser google-chrome
-#macro v set browser "setsid nohup vlc %u > /dev/null &"; open-in-browser ; set browser google-chrome
-macro m set browser "setsid nohup umpv %u > /dev/null &"; open-in-browser ; set browser qutebrowser
+#macro v set browser "setsid nohup vlc %u > /dev/null 2>&1 &"; open-in-browser ; set browser google-chrome
+macro m set browser "setsid nohup umpv %u > /dev/null 2>&1 &"; open-in-browser-and-mark-read ; up ; set browser qutebrowser
+macro M set browser "setsid nohup umpv %u > /dev/null 2>&1 &"; open-in-browser ; set browser qutebrowser
 #macro w set browser "w3m"; open-in-browser ; set browser google-chrome
 #macro p set browser "dmenuhandler"; open-in-browser ; set browser google-chrome
 #macro c set browser "xsel -b <<<" ; open-in-browser ; set browser google-chrome

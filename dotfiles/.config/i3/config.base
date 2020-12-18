@@ -224,6 +224,12 @@ bindsym $mod+Shift+m exec pcmanfm
 # Search and play radio
 bindsym $mod+Shift+Control+m exec "icradiomenu"
 
+# Control mpv
+bindsym $mod+Shift+Control+greater exec "umpv-ctrl playlist-next"
+bindsym $mod+Shift+Control+less exec "umpv-ctrl playlist-prev"
+bindsym $mod+Shift+Control+space exec "umpv-ctrl cycle pause"
+bindsym $mod+Shift+Control+s exec "umpv-ctrl playlist-shuffle"
+
 # Open RSS reader
 bindsym $mod+n exec "i3-sensible-terminal -e 'killall -v newsboat; tmux new-session newsboat'"
 

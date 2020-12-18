@@ -28,6 +28,9 @@ HISTFILESIZE=2000
 export FZF_TMUX=0
 export FZF_DEFAULT_OPTS='--height 20% --border'
 
+# Stop the terminal from freezing on Ctrl-S
+stty -ixon
+
 # Enable better completion for tmux
 source $HOME/.bash_completion.d/tmux
 
