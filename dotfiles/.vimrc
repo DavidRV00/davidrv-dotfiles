@@ -168,7 +168,7 @@ nnoremap <leader>S :%s//g<Left><Left>
 vnoremap <leader>S :s//g<Left><Left>
 nnoremap <leader>fm :!ranger $PWD<CR>
 nnoremap <leader>G :vimgrep //g **/*<Left><Left><Left><Left><Left><Left><Left>
-nnoremap <leader>X :!sudo chmod a+x %<CR>
+nnoremap <leader>X :w<CR>:!sudo chmod a+x %<CR>
 nnoremap cl :<C-u>pclose <bar> lclose <bar> cclose<CR>
 nnoremap co :<C-u>copen<CR>
 nnoremap <leader>ct :execute "set colorcolumn=" . (&colorcolumn == "" ? "101" : "")<CR>
@@ -451,7 +451,8 @@ set fillchars+=vert:\ " Note the space
 hi! Normal ctermbg=NONE
 hi! ColorColumn ctermbg=232
 hi! LineNr ctermbg=232 ctermfg=236
-hi! CursorLineNr cterm=NONE ctermbg=232 ctermfg=68
+"hi! CursorLineNr cterm=NONE ctermbg=232 ctermfg=68
+hi! CursorLineNr cterm=NONE ctermbg=68 ctermfg=232
 hi! CursorLine cterm=NONE ctermbg=233
 hi! TabLineFill ctermfg=234 ctermbg=234
 "hi! TabLineSel ctermbg=236 ctermfg=75
